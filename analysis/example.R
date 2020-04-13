@@ -1,5 +1,6 @@
 library(dplyr)
-Rawdat <- read.csv("~/Documents/Project2019/Lattice/PAC/recurdeath.csv")
+Rawdat <- read.csv("recurdeath.csv")
+
 dat = data.frame(G = as.character(Rawdat$study), E = (Rawdat$stage), H = (Rawdat$risk_group_nonodes), y = Rawdat$fu_time, cen = Rawdat$yesdied,
                  age = Rawdat$age , bmi = Rawdat$bmi_group)
 dat[Rawdat$risk_group_nonodes==3,]$H = 1
