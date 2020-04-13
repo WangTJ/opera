@@ -1,0 +1,15 @@
+Package: opera
+Type: Package
+Title: Ordering Poset Elements by Recursive Amalgamation
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: Tianjie Wang <wangtj929@gmail.com>
+Description: Stratifying partial ordinal variable with respect to survival outcome (other outcomes in near future)
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+  Matrix,
+  dplyr,
+  quadprog
+RoxygenNote: 7.1.0
