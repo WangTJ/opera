@@ -1,4 +1,4 @@
-#OPERA: Ordering Poset Elements by Recursive Amalgamation
+# OPERA: Ordering Poset Elements by Recursive Amalgamation
 
 Risk stratifying patients using established risk factors is a perpetual research theme. 
 
