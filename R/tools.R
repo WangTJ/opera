@@ -34,6 +34,22 @@ rowSums <- function (x, na.rm = FALSE, dims = 1L)
   z
 }
 
+#' transform Hasse diagram to paritial order inequalities
+#' @param Hasse the partial order relations expressed by directed graph
+#' @param Z a matrix of staging variable (poset)
+#' @return a matrix expressing the patial order constraints inequalities on coefficients
+#' @import igraph
 
+as_inequalities <- function(Hasse, Z){
+  cellName = colnames(Z)
+  PO = matrix(0, nrow = ecount(Hasse), ncol = length(cellName))
+  colnames(PO) = cellName
+  edgelist = as_edgelist(Hasse)
+  for (i in 1:ecount(Hasse)){
+    PO[i,edgelist[i,1]] = -1
+    PO[i,edgelist[i,2]] = 1
+  }
+  return(PO)
+}
 
 

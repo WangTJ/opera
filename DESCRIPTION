@@ -11,5 +11,6 @@ LazyData: true
 Imports: 
   Matrix,
   dplyr,
-  quadprog
+  quadprog,
+  igraph
 RoxygenNote: 7.1.0

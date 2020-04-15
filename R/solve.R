@@ -58,7 +58,7 @@ logPL <- function(Z, cov, cen, beta, theta)
 #' @import quadprog
 #' @import dplyr
 #' @import Matrix
-opera.solve = function(time, cen, Z, PO, cov, maxiter=10, eps=0.0001, GIC = 2){
+opera.solve <- function(time, cen, Z, PO, cov, maxiter=10, eps=0.0001, GIC = 2){
   original_gamma = dim(Z)[2]
   categories = colnames(Z)
   result <- rep(NA,original_gamma)
@@ -90,7 +90,7 @@ opera.solve = function(time, cen, Z, PO, cov, maxiter=10, eps=0.0001, GIC = 2){
 
     lambda_now = 10000
     lambda_max = lambda_now
-    while (TRUE){
+    for (i in 1:30){
       lambda = c(0,rep(lambda_now/2,original_gamma),rep(0,S-1), rep(0,length(covName)))
       n.iter=0
       diff.beta = 1000
@@ -110,6 +110,8 @@ opera.solve = function(time, cen, Z, PO, cov, maxiter=10, eps=0.0001, GIC = 2){
         QP <- solve.QP(Dmat, dvec, Amat=t(cbind(C.full, matrix(0,dim(C.full)[1],length(covName)))), bvec=rep(0,dim(C.full)[1]))
         beta <- QP$solution[1:length(cellName)]
         names(beta)=cellName
+        beta = beta - min(beta[2:(2+original_gamma-1)])
+
         theta <- QP$solution[(length(cellName)+1):(length(cellName)+length(covName))]
         names(theta) = covName
 
@@ -126,7 +128,7 @@ opera.solve = function(time, cen, Z, PO, cov, maxiter=10, eps=0.0001, GIC = 2){
     }
 
     lambda_min = lambda_now * 0.001
-    lambda_val = c(0, exp(seq(log(lambda_min),log(lambda_max),length=40)))
+    lambda_val = c(0, exp(seq(log(lambda_min),log(lambda_max),length=30)))
     for (i in 1:length(lambda_val)){
       lambda = c(0,rep(lambda_val[i],original_gamma),rep(0,S-1), rep(0,length(covName)))
       n.iter=0
@@ -146,6 +148,8 @@ opera.solve = function(time, cen, Z, PO, cov, maxiter=10, eps=0.0001, GIC = 2){
         Dmat <- Dmat + diag(0.0001, dim(Dmat)[1])
         QP <- solve.QP(Dmat, dvec, Amat=t(cbind(C.full, matrix(0,dim(C.full)[1],length(covName)))), bvec=rep(0,dim(C.full)[1]))
         beta <- QP$solution[1:length(cellName)]
+        beta = beta - min(beta[2:(2+original_gamma-1)])
+
         names(beta)=cellName
         theta <- QP$solution[(length(cellName)+1):(length(cellName)+length(covName))]
         names(theta) = covName
@@ -195,6 +199,7 @@ opera.solve = function(time, cen, Z, PO, cov, maxiter=10, eps=0.0001, GIC = 2){
     colnames(Spo0) = sapply(1:S , function(x) paste0('S',x))
 
     original_gamma = sum(beta[2:(original_gamma+1)]!=0)
+
     C.full <- rbind(Apo0 , cbind(0,as.matrix(Matrix::bdiag(diag(1,original_gamma),Spo0))))
     C.full <- as.matrix(dplyr::distinct(data.frame(C.full)))
 
